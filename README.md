@@ -1,48 +1,36 @@
-# demo-sait — Витрина демо-сайтов для фрилансера
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Многостраничный сайт-витрина. Фрилансер показывает потенциальным клиентам готовые демо-лендинги под разные ниши бизнеса. Каждая страница — полноценный лендинг с CTA "Хочу такой сайт".
+## Getting Started
 
-## Стек
-
-| Инструмент       | Версия  | Зачем                              |
-|------------------|---------|------------------------------------|
-| Next.js          | 14      | App Router, маршрутизация, SSG     |
-| TypeScript       | 5       | Типизация данных ниш               |
-| Tailwind CSS     | 3       | Стилизация, адаптив                |
-| Framer Motion    | 11      | Анимации секций                    |
-| Lucide React     | latest  | Иконки                             |
-
-## Страницы
-
-| Маршрут       | Описание                              |
-|---------------|---------------------------------------|
-| `/`           | Главная — витрина всех ниш            |
-| `/barbershop` | Демо-лендинг барбершопа               |
-| `/auto`       | Демо-лендинг автосервиса              |
-| `/dental`     | Демо-лендинг стоматологии             |
-| `/beauty`     | Демо-лендинг салона красоты           |
-| `/tutor`      | Демо-лендинг репетитора               |
-| `/coffee`     | Демо-лендинг кофейни                  |
-| `/contact`    | Страница контактов фрилансера         |
-
-## Быстрый старт
+First, run the development server:
 
 ```bash
-cd demo-sait
-npm install
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Открыть: http://localhost:3000
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Деплой
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Netlify / Vercel — автодеплой из ветки `main`.
-Домены подключаются отдельно для каждой ниши (позже).
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Документация
+## Learn More
 
-- [PROJECT_PLAN.md](./PROJECT_PLAN.md) — фазы разработки и задачи
-- [STRUCTURE.md](./STRUCTURE.md) — структура файлов, компоненты, типы данных
-- [PAGES_PLAN.md](./PAGES_PLAN.md) — детальный план каждой страницы с контентом
-- [DESIGN.md](./DESIGN.md) — полная дизайн-система: токены, типографика, анимации, темы ниш
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
