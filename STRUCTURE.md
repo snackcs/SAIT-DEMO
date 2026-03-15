@@ -45,6 +45,7 @@ demo-sait/
 │   │   ├── layout/
 │   │   │   ├── Header.tsx              # Логотип, навигация, CTA кнопка
 │   │   │   ├── MobileMenu.tsx          # Drawer-меню для мобилки (отдельный компонент!)
+│   │   │   ├── NicheLayout.tsx         # Обёртка для всех страниц ниш: DemoBanner + children
 │   │   │   └── Footer.tsx
 │   │   │
 │   │   ├── sections/                   # Переиспользуемые секции лендингов
@@ -80,7 +81,8 @@ demo-sait/
 │   │   │   ├── ReviewCard.tsx
 │   │   │   └── PricingCard.tsx
 │   │   │
-│   │   └── YandexMetrika.tsx           # Скрипт аналитики (next/script afterInteractive)
+│   │   ├── CookieBanner.tsx            # ФЗ-152 баннер согласия (localStorage: cookie_consent)
+│   └── YandexMetrika.tsx           # Скрипт аналитики (next/script, только после согласия)
 │   │
 │   ├── data/
 │   │   ├── types.ts                    # Все TypeScript типы
@@ -99,9 +101,12 @@ demo-sait/
 ├── PROJECT_PLAN.md
 ├── STRUCTURE.md
 ├── PAGES_PLAN.md
+├── DESIGN.md
 ├── next.config.mjs                     # images.remotePatterns для Unsplash
 ├── tailwind.config.ts
 ├── tsconfig.json                       # strict: true, paths: @/*
+├── prettier.config.js                  # semi:false, singleQuote:true, printWidth:100
+├── .editorconfig                       # indent_size=2, end_of_line=lf (Win/Mac совместимость)
 ├── .env.local                          # Локальные переменные (в .gitignore!)
 ├── .env.example                        # Шаблон переменных (коммитится в репо)
 └── package.json
@@ -273,16 +278,20 @@ NEXT_PUBLIC_SITE_URL=https://твой-домен.ru
 
 ## tailwind.config.ts (ключевые токены)
 
+> Полный `tailwind.config.ts` с готовым кодом — в **[DESIGN.md](./DESIGN.md)**, раздел 9.
+
 ```ts
 theme: {
   extend: {
     colors: {
-      background: '#0a0a0a',
-      surface: '#141414',
-      border: '#2a2a2a',
-      'text-primary': '#f5f5f5',
-      'text-secondary': '#888888',
-      accent: '#e8c547',
+      // Светлая база (см. DESIGN.md раздел 2.1)
+      background:     '#F8FAFC',
+      surface:        '#FFFFFF',
+      'surface-alt':  '#F1F5F9',
+      border:         '#E2E8F0',
+      'text-primary': '#0F172A',
+      'text-secondary':'#475569',
+      // Hero/CTA остаются тёмными через overlay rgba(10,15,25,0.58)
     },
     fontFamily: {
       serif: ['var(--font-playfair)', 'serif'],
@@ -370,6 +379,74 @@ export type NichePreview = {
   color: string
 }
 ```
+
+---
+
+## Стратегия изображений next/image
+
+### blurDataURL — предотвращение layout shift
+
+`next/image` без `placeholder` вызывает CLS (Cumulative Layout Shift) — изображение "прыгает" при загрузке. Решение:
+
+```tsx
+// ✅ ПРАВИЛЬНО — placeholder blur устраняет layout shift
+<Image
+  src={data.heroImage}
+  alt={data.title}
+  fill
+  priority
+  placeholder="blur"
+  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+/>
+```
+
+Универсальный `blurDataURL` — однопиксельное серое изображение в base64. Использовать один для всех `next/image` в проекте. Хранить как константу в `src/lib/utils.ts`:
+
+```ts
+export const BLUR_DATA_URL =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+```
+
+### Fallback при недоступности Unsplash
+
+Unsplash CDN может быть недоступен (блокировки в РФ). Стратегия:
+- В `next.config.mjs` добавить `images.dangerouslyAllowSVG: false` (безопасность)
+- В `onError` у `<Image>` установить локальный fallback из `/public/images/fallback.jpg`
+- Создать `public/images/fallback.jpg` — нейтральный серый placeholder 1200×800
+
+```tsx
+<Image
+  src={imageUrl}
+  onError={(e) => { e.currentTarget.src = '/images/fallback.jpg' }}
+  ...
+/>
+```
+
+---
+
+## NicheLayout — обёртка для страниц ниш
+
+Все 6 страниц ниш (`/barbershop`, `/auto`, ...) оборачиваются в `NicheLayout`:
+
+```tsx
+// src/components/layout/NicheLayout.tsx
+// Принимает data: NicheData и рендерит DemoBanner над children
+// Использование в page.tsx:
+// <NicheLayout data={barbershopData}><NicheHero data={barbershopData} />...</NicheLayout>
+
+type Props = { data: NicheData; children: React.ReactNode }
+
+export function NicheLayout({ data, children }: Props) {
+  return (
+    <>
+      <DemoBanner data={data} />
+      {children}
+    </>
+  )
+}
+```
+
+Преимущество: не дублировать `<DemoBanner data={data} />` в каждом `page.tsx`. Если понадобится добавить общий элемент для всех ниш — правится в одном месте.
 
 ---
 
