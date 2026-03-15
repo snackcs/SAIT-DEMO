@@ -43,4 +43,6 @@ Netlify / Vercel — автодеплой из ветки `main`.
 ## Документация
 
 - [PROJECT_PLAN.md](./PROJECT_PLAN.md) — фазы разработки и задачи
-- [STRUCTURE.md](./STRUCTURE.md) — структура файлов и компонентов
+- [STRUCTURE.md](./STRUCTURE.md) — структура файлов, компоненты, типы данных
+- [PAGES_PLAN.md](./PAGES_PLAN.md) — детальный план каждой страницы с контентом
+- [DESIGN.md](./DESIGN.md) — полная дизайн-система: токены, типографика, анимации, темы ниш
