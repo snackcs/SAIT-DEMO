@@ -4,6 +4,7 @@ import DemoBanner from '@/components/sections/DemoBanner'
 import NicheHeader from '@/components/layout/NicheHeader'
 import Footer from '@/components/layout/Footer'
 import FloatingCTA from '@/components/sections/FloatingCTA'
+import AIChatWidget from '@/components/sections/AIChatWidget'
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
 import { NicheJsonLd } from '@/components/ui/JsonLd'
 
@@ -33,6 +34,7 @@ export default async function NicheLayout({
         telegram={data.contacts.telegram}
         whatsapp={data.contacts.whatsapp}
       />
+      <AIChatWidget niche={data.slug} color={data.color} />
     </>
   )
 }
