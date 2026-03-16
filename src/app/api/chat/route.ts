@@ -2,9 +2,9 @@ import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY
-const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const MODEL = 'llama-3.3-70b-versatile'
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
+const MODEL = 'gemini-1.5-flash'
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`
 
 // System prompts — настроены под каждую нишу
 const SYSTEM_PROMPTS: Record<string, string> = {
@@ -42,9 +42,9 @@ const SYSTEM_PROMPTS: Record<string, string> = {
 const DEFAULT_PROMPT = `Ты онлайн-помощник бизнеса. Отвечаешь коротко и по делу. Говоришь на русском языке.`
 
 export async function POST(req: NextRequest) {
-  if (!GROQ_API_KEY) {
+  if (!GEMINI_API_KEY) {
     return new Response(
-      JSON.stringify({ error: 'GROQ_API_KEY не настроен. Добавьте его в .env.local' }),
+      JSON.stringify({ error: 'GEMINI_API_KEY не настроен. Добавьте его в .env.local' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } },
     )
   }
@@ -56,34 +56,37 @@ export async function POST(req: NextRequest) {
 
   const systemPrompt = SYSTEM_PROMPTS[niche] ?? DEFAULT_PROMPT
 
-  const groqRes = await fetch(GROQ_URL, {
+  // Конвертируем в формат Gemini (role: 'user' | 'model')
+  const contents = messages.slice(-10).map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }],
+  }))
+
+  const geminiRes = await fetch(`${GEMINI_URL}&key=${GEMINI_API_KEY}`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${GROQ_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: MODEL,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages.slice(-10), // последние 10 сообщений контекст
-      ],
-      stream: true,
-      max_tokens: 400,
-      temperature: 0.7,
+      contents,
+      systemInstruction: {
+        parts: [{ text: systemPrompt }],
+      },
+      generationConfig: {
+        maxOutputTokens: 400,
+        temperature: 0.7,
+      },
     }),
   })
 
-  if (!groqRes.ok) {
-    const err = await groqRes.text()
+  if (!geminiRes.ok) {
+    const err = await geminiRes.text()
     return new Response(JSON.stringify({ error: err }), {
-      status: groqRes.status,
+      status: geminiRes.status,
       headers: { 'Content-Type': 'application/json' },
     })
   }
 
   // Проксируем SSE стрим напрямую клиенту
-  return new Response(groqRes.body, {
+  return new Response(geminiRes.body, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',

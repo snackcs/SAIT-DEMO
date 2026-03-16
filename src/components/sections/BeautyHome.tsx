@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@/components/ui/DemoImage'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import type { NicheData } from '@/data/types'
 import HeroCentered from './HeroCentered'

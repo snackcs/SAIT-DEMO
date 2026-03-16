@@ -92,7 +92,7 @@ export default function AIChatWidget({
 
           try {
             const json = JSON.parse(data)
-            const delta = json.choices?.[0]?.delta?.content ?? ''
+            const delta = json.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
             if (delta) {
               setMessages(prev => {
                 const copy = [...prev]

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import Image from '@/components/ui/DemoImage'
 import type { PortfolioItem } from '@/data/extras/beauty-portfolio'
 import { portfolioCategories } from '@/data/extras/beauty-portfolio'
 import { BLUR_DATA_URL, cn } from '@/lib/utils'

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
+import Image from '@/components/ui/DemoImage'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { BLUR_DATA_URL } from '@/lib/utils'
 import FadeIn from '@/components/ui/FadeIn'

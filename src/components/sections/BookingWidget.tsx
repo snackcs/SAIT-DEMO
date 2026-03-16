@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+import Image from '@/components/ui/DemoImage'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { BLUR_DATA_URL } from '@/lib/utils'

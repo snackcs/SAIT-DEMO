@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from '@/components/ui/DemoImage'
 import type { NicheData } from '@/data/types'
 import { BLUR_DATA_URL } from '@/lib/utils'
 import FadeIn from '@/components/ui/FadeIn'
