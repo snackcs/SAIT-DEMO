@@ -3,8 +3,10 @@ import Image from 'next/image'
 import { ArrowRight, Star } from 'lucide-react'
 import type { NicheData } from '@/data/types'
 import HeroCentered from './HeroCentered'
-import BookingWidget from './BookingWidget'
+import dynamic from 'next/dynamic'
 import FadeIn from '@/components/ui/FadeIn'
+
+const BookingWidget = dynamic(() => import('./BookingWidget'))
 import { BLUR_DATA_URL } from '@/lib/utils'
 
 export default function BarberHome({ data }: { data: NicheData }) {

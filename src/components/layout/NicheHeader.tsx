@@ -5,57 +5,9 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { Menu, X, ArrowLeft } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { nichePreviews } from '@/data/niches'
 
-const NICHE_TABS: Record<string, { href: string; label: string }[]> = {
-  barbershop: [
-    { href: '/barbershop', label: 'Главная' },
-    { href: '/barbershop/masters', label: 'Мастера' },
-    { href: '/barbershop/services', label: 'Услуги' },
-    { href: '/barbershop/gallery', label: 'Галерея' },
-    { href: '/barbershop/pricing', label: 'Цены' },
-    { href: '/barbershop/contacts', label: 'Контакты' },
-  ],
-  auto: [
-    { href: '/auto', label: 'Главная' },
-    { href: '/auto/services', label: 'Услуги' },
-    { href: '/auto/diagnostics', label: 'Диагностика' },
-    { href: '/auto/brands', label: 'Бренды авто' },
-    { href: '/auto/pricing', label: 'Цены' },
-    { href: '/auto/contacts', label: 'Контакты' },
-  ],
-  dental: [
-    { href: '/dental', label: 'Главная' },
-    { href: '/dental/doctors', label: 'Врачи' },
-    { href: '/dental/services', label: 'Услуги' },
-    { href: '/dental/before-after', label: 'До и после' },
-    { href: '/dental/pricing', label: 'Цены' },
-    { href: '/dental/contacts', label: 'Контакты' },
-  ],
-  beauty: [
-    { href: '/beauty', label: 'Главная' },
-    { href: '/beauty/masters', label: 'Мастера' },
-    { href: '/beauty/services', label: 'Услуги' },
-    { href: '/beauty/portfolio', label: 'Портфолио' },
-    { href: '/beauty/pricing', label: 'Цены' },
-    { href: '/beauty/contacts', label: 'Контакты' },
-  ],
-  tutor: [
-    { href: '/tutor', label: 'Главная' },
-    { href: '/tutor/about', label: 'Обо мне' },
-    { href: '/tutor/program', label: 'Программа' },
-    { href: '/tutor/gallery', label: 'Результаты' },
-    { href: '/tutor/pricing', label: 'Цены' },
-    { href: '/tutor/contacts', label: 'Контакты' },
-  ],
-  coffee: [
-    { href: '/coffee', label: 'Главная' },
-    { href: '/coffee/menu', label: 'Меню' },
-    { href: '/coffee/coffee-info', label: 'О кофе' },
-    { href: '/coffee/gallery', label: 'Атмосфера' },
-    { href: '/coffee/events', label: 'События' },
-    { href: '/coffee/contacts', label: 'Контакты' },
-  ],
-}
+const NICHE_TABS = Object.fromEntries(nichePreviews.map((n) => [n.slug, n.tabs]))
 
 export default function NicheHeader({
   slug,
@@ -117,6 +69,8 @@ export default function NicheHeader({
               onClick={() => setOpen((v) => !v)}
               className="rounded-lg p-2 text-[#0F172A] hover:bg-[#F1F5F9] md:hidden"
               aria-label="Меню"
+              aria-expanded={open}
+              aria-controls="niche-mobile-menu"
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -124,6 +78,9 @@ export default function NicheHeader({
         </div>
 
         <div
+          id="niche-mobile-menu"
+          role="navigation"
+          aria-label="Навигация по нише"
           className={cn(
             'overflow-hidden transition-all duration-300 md:hidden',
             open ? 'max-h-96 pb-3' : 'max-h-0',

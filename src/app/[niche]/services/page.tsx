@@ -1,35 +1,22 @@
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getNicheBySlug, allNiches } from '@/data/niches'
+import { nicheStaticParams, resolveNiche, nicheMetadata } from '@/lib/nichePageFactory'
 import NicheServices from '@/components/sections/NicheServices'
 import FadeIn from '@/components/ui/FadeIn'
 import Link from 'next/link'
 
-export function generateStaticParams() {
-  return allNiches.map((n) => ({ niche: n.slug }))
-}
+export const generateStaticParams = nicheStaticParams
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ niche: string }>
-}): Promise<Metadata> {
-  const { niche } = await params
-  const data = getNicheBySlug(niche)
-  if (!data) return {}
-  return { title: `Услуги — ${data.title}`, description: data.description }
+export async function generateMetadata({ params }: { params: Promise<{ niche: string }> }): Promise<Metadata> {
+  return nicheMetadata(params, (d) => `Услуги — ${d.title}`, (d) => d.description)
 }
 
 export default async function ServicesPage({ params }: { params: Promise<{ niche: string }> }) {
+  const data = await resolveNiche(params)
   const { niche } = await params
-  const data = getNicheBySlug(niche)
-  if (!data) notFound()
 
   return (
     <>
       <NicheServices data={data} />
-
-      {/* CTA after services */}
       <section className="bg-white pb-24">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <FadeIn>

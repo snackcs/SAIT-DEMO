@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { ArrowRight, MapPin, Clock } from 'lucide-react'
 import type { NicheData } from '@/data/types'
 import HeroCentered from './HeroCentered'
-import CoffeeFinder from './CoffeeFinder'
+import dynamic from 'next/dynamic'
+const CoffeeFinder = dynamic(() => import('./CoffeeFinder'))
 import FadeIn from '@/components/ui/FadeIn'
 import { BLUR_DATA_URL } from '@/lib/utils'
 

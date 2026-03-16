@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import type { NicheData } from '@/data/types'
 import HeroCentered from './HeroCentered'
-import BeautyQuiz from './BeautyQuiz'
+import dynamic from 'next/dynamic'
+const BeautyQuiz = dynamic(() => import('./BeautyQuiz'))
 import FadeIn from '@/components/ui/FadeIn'
 import { BLUR_DATA_URL } from '@/lib/utils'
 

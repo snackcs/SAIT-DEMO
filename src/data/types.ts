@@ -99,10 +99,13 @@ export type NicheWithResults = NicheBase & {
 
 export type NicheData = NicheWithGallery | NicheWithResults
 
+export type NicheTab = { href: string; label: string }
+
 export type NichePreview = {
   slug: string
   label: string
   tag: string
   Icon: LucideIcon
   color: string
+  tabs: NicheTab[]
 }

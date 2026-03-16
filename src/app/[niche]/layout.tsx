@@ -4,6 +4,8 @@ import DemoBanner from '@/components/sections/DemoBanner'
 import NicheHeader from '@/components/layout/NicheHeader'
 import Footer from '@/components/layout/Footer'
 import FloatingCTA from '@/components/sections/FloatingCTA'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import { NicheJsonLd } from '@/components/ui/JsonLd'
 
 export default async function NicheLayout({
   children,
@@ -18,9 +20,12 @@ export default async function NicheLayout({
 
   return (
     <>
+      <NicheJsonLd data={data} />
       <DemoBanner color={data.color} />
       <NicheHeader slug={data.slug} color={data.color} title={data.title} />
-      <main>{children}</main>
+      <main>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </main>
       <Footer />
       <FloatingCTA
         color={data.color}

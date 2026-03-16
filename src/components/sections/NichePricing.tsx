@@ -2,6 +2,7 @@ import type { NicheData } from '@/data/types'
 import { Check, Star, Wrench, BookOpen, Coffee } from 'lucide-react'
 import Link from 'next/link'
 import FadeIn from '@/components/ui/FadeIn'
+import type { ComponentType } from 'react'
 
 // ─── Barbershop: full price-menu list (dark, gold) ───────────────────────────
 function PricingMenuBoard({ data }: { data: NicheData }) {
@@ -530,15 +531,17 @@ function PricingMembership({ data }: { data: NicheData }) {
   )
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// ─── Component registry — добавить нишу = одна строка ────────────────────────
+const PRICING_REGISTRY: Record<string, ComponentType<{ data: NicheData }>> = {
+  barbershop: PricingMenuBoard,
+  auto: PricingWorkOrder,
+  dental: PricingMedical,
+  beauty: PricingBeauty,
+  tutor: PricingCourse,
+  coffee: PricingMembership,
+}
+
 export default function NichePricing({ data }: { data: NicheData }) {
-  switch (data.slug) {
-    case 'barbershop': return <PricingMenuBoard data={data} />
-    case 'auto':       return <PricingWorkOrder data={data} />
-    case 'dental':     return <PricingMedical data={data} />
-    case 'beauty':     return <PricingBeauty data={data} />
-    case 'tutor':      return <PricingCourse data={data} />
-    case 'coffee':     return <PricingMembership data={data} />
-    default:           return <PricingMenuBoard data={data} />
-  }
+  const Component = PRICING_REGISTRY[data.slug] ?? PricingMenuBoard
+  return <Component data={data} />
 }

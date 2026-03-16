@@ -1,13 +1,7 @@
 import Link from 'next/link'
+import { nichePreviews } from '@/data/niches'
 
-const niches = [
-  { href: '/barbershop', label: 'Барбершоп' },
-  { href: '/auto', label: 'Автосервис' },
-  { href: '/dental', label: 'Стоматология' },
-  { href: '/beauty', label: 'Студия красоты' },
-  { href: '/tutor', label: 'Репетитор' },
-  { href: '/coffee', label: 'Кофейня' },
-]
+const niches = nichePreviews.map((n) => ({ href: `/${n.slug}`, label: n.label }))
 
 export default function Footer() {
   return (

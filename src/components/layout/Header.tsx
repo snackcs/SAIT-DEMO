@@ -4,15 +4,9 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { nichePreviews } from '@/data/niches'
 
-const links = [
-  { href: '/barbershop', label: 'Барбершоп' },
-  { href: '/auto', label: 'Автосервис' },
-  { href: '/dental', label: 'Стоматология' },
-  { href: '/beauty', label: 'Студия красоты' },
-  { href: '/tutor', label: 'Репетитор' },
-  { href: '/coffee', label: 'Кофейня' },
-]
+const links = nichePreviews.map((n) => ({ href: `/${n.slug}`, label: n.label }))
 
 export default function Header() {
   const [open, setOpen] = useState(false)
@@ -53,6 +47,8 @@ export default function Header() {
             onClick={() => setOpen((v) => !v)}
             className="rounded-xl p-2 text-[#0F172A] transition-colors hover:bg-[#F1F5F9] lg:hidden"
             aria-label="Меню"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -60,6 +56,9 @@ export default function Header() {
 
         {/* Mobile dropdown */}
         <div
+          id="mobile-menu"
+          role="navigation"
+          aria-label="Мобильное меню"
           className={cn(
             'mt-2 overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/5 transition-all duration-300 lg:hidden',
             open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0',

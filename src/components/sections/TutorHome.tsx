@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { ArrowRight, Trophy, Target, BookOpen } from 'lucide-react'
 import type { NicheData } from '@/data/types'
 import HeroSplit from './HeroSplit'
-import ScoreCalculator from './ScoreCalculator'
+import dynamic from 'next/dynamic'
+const ScoreCalculator = dynamic(() => import('./ScoreCalculator'))
 import FadeIn from '@/components/ui/FadeIn'
 
 const ACHIEVEMENTS = [

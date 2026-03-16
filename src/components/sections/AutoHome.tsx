@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { ArrowRight, Shield, Clock, Wrench } from 'lucide-react'
 import type { NicheData } from '@/data/types'
 import HeroSplit from './HeroSplit'
-import DiagnosticsCalculator from './DiagnosticsCalculator'
+import dynamic from 'next/dynamic'
+const DiagnosticsCalculator = dynamic(() => import('./DiagnosticsCalculator'))
 import FadeIn from '@/components/ui/FadeIn'
 
 const TRUST = [

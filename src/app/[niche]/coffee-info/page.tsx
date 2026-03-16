@@ -1,28 +1,18 @@
-import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getNicheBySlug, allNiches } from '@/data/niches'
+import { notFound } from 'next/navigation'
+import { nicheStaticParams, resolveNiche, nicheMetadata } from '@/lib/nichePageFactory'
 import CoffeeOriginsSection from '@/components/sections/CoffeeOriginsSection'
 import { coffeeOrigins } from '@/data/extras/coffee-origins'
 
-export function generateStaticParams() {
-  return allNiches.map((n) => ({ niche: n.slug }))
-}
+export const generateStaticParams = nicheStaticParams
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ niche: string }>
-}): Promise<Metadata> {
-  const { niche } = await params
-  const data = getNicheBySlug(niche)
-  if (!data) return {}
-  return { title: `О кофе — ${data.title}` }
+export async function generateMetadata({ params }: { params: Promise<{ niche: string }> }): Promise<Metadata> {
+  return nicheMetadata(params, (d) => `О кофе — ${d.title}`)
 }
 
 export default async function CoffeeInfoPage({ params }: { params: Promise<{ niche: string }> }) {
   const { niche } = await params
-  const data = getNicheBySlug(niche)
-  if (!data || niche !== 'coffee') notFound()
-
+  const data = await resolveNiche(params)
+  if (niche !== 'coffee') notFound()
   return <CoffeeOriginsSection origins={coffeeOrigins} color={data.color} />
 }

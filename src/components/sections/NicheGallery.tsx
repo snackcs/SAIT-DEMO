@@ -1,13 +1,25 @@
-import type { NicheWithGallery } from '@/data/types'
-import FadeIn from '@/components/ui/FadeIn'
-import GalleryLightbox from './GalleryLightbox'
+'use client'
 
-export default function NicheGallery({ data }: { data: NicheWithGallery }) {
+import FadeIn from '@/components/ui/FadeIn'
+import dynamic from 'next/dynamic'
+
+const GalleryLightbox = dynamic(() => import('./GalleryLightbox'), {
+  loading: () => (
+    <div className="mt-14 grid animate-pulse gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="aspect-[4/3] rounded-2xl bg-[#F1F5F9]" />
+      ))}
+    </div>
+  ),
+  ssr: false,
+})
+
+export default function NicheGallery({ images, color }: { images: string[]; color: string }) {
   return (
     <section className="bg-white py-24">
       <div className="mx-auto max-w-6xl px-6">
         <FadeIn>
-          <p className="mb-3 text-center text-xs font-semibold uppercase tracking-widest" style={{ color: data.color }}>
+          <p className="mb-3 text-center text-xs font-semibold uppercase tracking-widest" style={{ color }}>
             Наши работы
           </p>
           <h2 className="text-center font-serif text-3xl font-bold text-[#0F172A] md:text-4xl">
@@ -18,7 +30,7 @@ export default function NicheGallery({ data }: { data: NicheWithGallery }) {
           </p>
         </FadeIn>
 
-        <GalleryLightbox images={data.gallery} color={data.color} />
+        <GalleryLightbox images={images} color={color} />
       </div>
     </section>
   )
